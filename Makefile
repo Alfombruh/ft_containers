@@ -1,17 +1,20 @@
-NAME = ft_containers.a
+NAME = ft_containers
 CC = clang++
-CFLAGS = -Werror -Wall -Wextra -fsanitize=address -g3
-FILES = 
+CFLAGS = #-Werror -Wall -Wextra -fsanitize=address -g3
+FILES = main
 
 SRCS = $(addsuffix .cpp,$(FILES))
 OBJS = $(addsuffix .o,$(FILES))
 
-INCLUDES = 
+INCLUDES = srcs/
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	ar rcs $(OBJS) $(NAME)
+.cpp.o: $(SRCS) $(INCLUDES)
+	$(CC) $(CFLAGS) -I $(INCLUDES) -c $(SRCS) -o $@
+
+$(NAME): $(OBJS) $(INCLUDES)
+	$(CC) $(CFLAGS) -I $(INCLUDES) $(OBJS) -o $@
 
 clean:
 	rm -rf $(OBJS)
