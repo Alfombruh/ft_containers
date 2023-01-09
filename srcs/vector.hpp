@@ -35,6 +35,50 @@ namespace ft
         {
             this->array = pos;
         };
+
+        //operator
+        bool    operator==(const iterator &r)
+        {
+            if (array == r.array)
+                return true;
+            return false;
+        };
+        bool    operator!=(const iterator &r)
+        {
+            if (array == r.array)
+                return false;
+            return true;
+        };
+        value_type  operator*()
+        {
+            return(*array);
+        };
+        void    operator=(const iterator &r)
+        {
+            array = r.array;
+        };
+        iterator	operator++(void)
+        {
+            array++;
+			return (*this);
+        }
+        iterator	operator++(int)
+        {
+			iterator temp(this);
+            array++;
+			return (temp);
+        };
+		iterator	operator--(void)
+		{
+			array--;
+			return (*this);
+		};
+		iterator	operator--(int)
+		{
+			iterator	temp(this);
+			array--;
+			return (temp);
+		};
     };
 
     template <class T, class Allocator = std::allocator<T> >
@@ -54,9 +98,9 @@ namespace ft
         typedef typename allocator_type::const_pointer const_pointer;
         typedef typename ft::iterator<vector> iterator;
         typedef typename ft::iterator<const vector> const_iterator;
-        // typedef a reverse_iterator<iterator>    reverse_iterator;
-        // typedef a reverse_iterator<const iterator>  const_reverse_iterator;
-        // typedef a iterator_traits<iterator>::diffference_type(same as ptrdiff_t)  difference_type;
+        //typedef a reverse_iterator<iterator>    reverse_iterator;
+        //typedef a reverse_iterator<const iterator>  const_reverse_iterator;
+        //typedef a iterator_traits<iterator>::diffference_type(same as ptrdiff_t)  difference_type;
         typedef size_t size_type;
 
     public:
@@ -68,15 +112,17 @@ namespace ft
             std::cout << "Just Allocated\n";
         };
         explicit vector(const Allocator &alloc){
-
+			allocate(alloc);
         };
         explicit vector(size_type count, const T &value, const Allocator &alloc = Allocator()) // why tf does it equal alloc to Allocator()
-            {
-
-            };
+        {
+			array = (T *)allocate.allocate(sizeof(T) * count);
+			for (int i = 0; i < count; i++)
+				array[i] = value;
+        };
         template <class InputIt>
         vector(InputIt first, InputIt last, const Allocator &alloc = Allocator()){
-
+			
         };
         vector(const vector &other);
         // destructors (https://en.cppreference.com/w/cpp/container/vector/~vector)
@@ -112,11 +158,11 @@ namespace ft
 
         iterator begin()
         {
-            return (iterator(this->*array));
+            return (iterator(this->array));
         };
         const_iterator begin() const
         {
-            return (const_iterator(this->*array));
+            return (const_iterator(this->array));
         };
         iterator end()
         {
