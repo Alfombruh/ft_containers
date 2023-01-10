@@ -1,5 +1,5 @@
 NAME = ft_containers
-CC = clang++
+CC = c++
 CFLAGS = -fsanitize=address -g3 #-Werror -Wall -Wextra
 FILES = main
 
