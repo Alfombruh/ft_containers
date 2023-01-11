@@ -5,10 +5,10 @@ using std::cout;
 
 int main()
 {
-    ft::vector<int>(10, 5) test;
-
+    ft::vector<int> test(10, 5);
     ft::vector<int>::iterator it;
+
     it = test.begin();
-    cout << *it;
+    cout << *it << "\n";
     return (0);
 }

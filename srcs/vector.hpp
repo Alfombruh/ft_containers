@@ -2,6 +2,8 @@
 #define VECTOR_HPP
 
 #include "iterator.hpp"
+#include "enable_if.hpp"
+#include "is_integral.hpp"
 
 
 #include <memory>
@@ -98,6 +100,7 @@ namespace ft
 			temp.array -= r;
 			return(temp);
 		};
+		//void	operator[](){};
 	};
 
 	template <class T, class Allocator = std::allocator<T> >
@@ -122,7 +125,7 @@ namespace ft
 		//typedef a reverse_iterator<iterator>	reverse_iterator;
 		//typedef a reverse_iterator<const iterator>  const_reverse_iterator;
 		//typedef a iterator_traits<iterator>::diffference_type(same as ptrdiff_t)  difference_type;
-		typedef size_t size_type;
+		//typedef size_t size_type;
 
 	public:
 		// constructors (https://en.cppreference.com/w/cpp/container/vector/vector)
@@ -135,13 +138,14 @@ namespace ft
 		explicit vector(const Allocator &alloc){
 			allocate(alloc);
 		};
-		explicit vector(size_type count, const T &value, const Allocator &alloc = Allocator()) // why tf does it equal alloc to Allocator()
+		explicit vector(size_type count, const T &value, const Allocator &alloc = Allocator())
 		{
 			array = (T *)allocate.allocate(sizeof(T) * count);
 			for (int i = 0; i < count; i++)
 				array[i] = value;
 		};
-		template <class InputIt>
+		template <class InputIt >
+		typename ft::enable_if< ft::is_integral<InputIt>, iterator >
 		vector(InputIt first, InputIt last, const Allocator &alloc = Allocator()){
 			
 		};
