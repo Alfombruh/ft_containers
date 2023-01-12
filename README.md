@@ -55,17 +55,40 @@ STL containers are forbidden.
 You are allowed to use the STD library.
 
 ---
-## Bibliography <a name="biblio"></a>
-- [cplusplus][cplusplus]
-- [cppreference][cppreference]
+## Using Enable_if
+How the fuck am I supossed to use enable if and what the fuck it is? Well those are some questions that Im to lazy to respond so Im gonna give some links so you can undestand it. My iterator constructor is:
+```c++
+template <class InputIt >
+		vector(InputIt first, InputIt last, const Allocator &alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type * = 0) {
+```
+Some Links I used are:
+1.	[How to use SFINAE to restrict overload to input iterators][How to use SFINAE to restrict overload to input iterators]
+2.	[std::enable_if to conditionally compile a member function][std::enable_if to conditionally compile a member function]
+3.	[select class constructor using enable_if][select class constructor using enable_if]
 
+--
+## Bibliography <a name="biblio"></a>
+-	[cplusplus][cplusplus]
+-	[cppreference][cppreference]
+-	[what is enable_if][what is enable_if]
+-	[std::enable_if to conditionally compile a member function][std::enable_if to conditionally compile a member function]
+-	[select class constructor using enable_if][select class constructor using enable_if]
+-	[How to use SFINAE to restrict overload to input iterators][How to use SFINAE to restrict overload to input iterators]
 ---
 ## License <a name="license"></a>
 
 Comeme el culo
 
----
+## Terroristas
+
+- YO
+- <a href="https://www.github.com/AingeruAlvarezSanchez>HELECHO</a>
+
 [//]: #
-  [Test]: <localhost:8080>
-  [cplusplus]: <https://www.cplusplus.com/>
-  [cppreference]: <https://cppreference.com/>
+	[Test]: <localhost:8080>
+	[cplusplus]: <https://www.cplusplus.com/>
+	[cppreference]: <https://cppreference.com/>
+	[what is enable_if]: <https://medium.com/@sidbhasin82/c-templates-what-is-std-enable-if-and-how-to-use-it-fd76d3abbabe>
+	[std::enable_if to conditionally compile a member function]: <https://stackoverflow.com/questions/6972368/stdenable-if-to-conditionally-compile-a-member-function>
+	[select class constructor using enable_if]: <https://stackoverflow.com/questions/17842478/select-class-constructor-using-enable-if>
+	[How to use SFINAE to restrict overload to input iterators]: <https://stackoverflow.com/questions/25668966/how-to-use-sfinae-to-restrict-overload-to-input-iterators>

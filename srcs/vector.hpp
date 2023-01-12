@@ -145,9 +145,8 @@ namespace ft
 				array[i] = value;
 		};
 		template <class InputIt >
-		typename ft::enable_if< ft::is_integral<InputIt>, iterator >
-		vector(InputIt first, InputIt last, const Allocator &alloc = Allocator()){
-			
+		vector(InputIt first, InputIt last, const Allocator &alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type * = 0) {
+			std::cout << "sexo" << '\n';
 		};
 		vector(const vector &other);
 		// destructors (https://en.cppreference.com/w/cpp/container/vector/~vector)
@@ -191,11 +190,11 @@ namespace ft
 		};
 		iterator end()
 		{
-			return (iterator(this->size));
+			return (iterator(this->array + this->size));
 		};
 		const_iterator end() const
 		{
-			return (const_iterator(this->size));
+			return (const_iterator(this->array + this->size));
 		};
 	};
 };

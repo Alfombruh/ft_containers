@@ -18,9 +18,13 @@ int main()
 	// cout << "it after changes" << *it << "\n";
 	// cout << "ot after changes" << *ot << "\n";
 	//cout << "result is: " << *result << "\n";
-	std::integral_constant< bool , 50> hola;
+	if (!std::is_integral<std::string>::value)
+    {
+		cout << "not integral\n";
+        // operations to perform if T is an integral type
+    }
 
-	cout << hola << "\n";
+	//cout << hola << "\n";
 
 	return (0);
 }
