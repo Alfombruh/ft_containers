@@ -82,7 +82,7 @@ Comeme el culo
 ## Terroristas
 
 - YO
-- <a href="https://www.github.com/AingeruAlvarezSanchez>HELECHO</a>
+- e<a href="https://www.github.com/AingeruAlvarezSanchez">Lecho</a>
 
 [//]: #
 	[Test]: <localhost:8080>
