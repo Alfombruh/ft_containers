@@ -4,12 +4,18 @@
 1. [Index](#index)
 2. [File Hierarchy ](#file-hierarchy-)
 3. [Mandatory ](#mandatory-)
+4. [Enable_if](#using-enable_if)
 4. [Bibliography ](#bibliography-)
 5. [License](#license)
 ---
 ## To-Do List <a name="todo"></a>
 
-- Read cplusplus and cppreference
+-	reverse_iterator
+-	vector
+-	stack
+-	binary tree
+-	map
+
 ---
 ## File Hierarchy <a name="files"></a>
 ```
@@ -55,7 +61,7 @@ STL containers are forbidden.
 You are allowed to use the STD library.
 
 ---
-## Using Enable_if
+## Using Enable_if <a name="Enable_if"></a>
 How the fuck am I supossed to use enable if and what the fuck it is? Well those are some questions that Im to lazy to respond so Im gonna give some links so you can undestand it. My iterator constructor is:
 ```c++
 template <class InputIt >
@@ -65,6 +71,12 @@ Some Links I used are:
 1.	[How to use SFINAE to restrict overload to input iterators][How to use SFINAE to restrict overload to input iterators]
 2.	[std::enable_if to conditionally compile a member function][std::enable_if to conditionally compile a member function]
 3.	[select class constructor using enable_if][select class constructor using enable_if]
+
+## Lexicographical Compare
+
+This is well explained and documented in both cppreference and cplusplus pages, it is basically a strcmplike templated function
+[CPPREFERENCE][lexicographicalcomparecpp]
+[CPLUSPLUS][lexicographicalcomparecplusplus]
 
 --
 ## Bibliography <a name="biblio"></a>
@@ -92,3 +104,5 @@ Comeme el culo
 	[std::enable_if to conditionally compile a member function]: <https://stackoverflow.com/questions/6972368/stdenable-if-to-conditionally-compile-a-member-function>
 	[select class constructor using enable_if]: <https://stackoverflow.com/questions/17842478/select-class-constructor-using-enable-if>
 	[How to use SFINAE to restrict overload to input iterators]: <https://stackoverflow.com/questions/25668966/how-to-use-sfinae-to-restrict-overload-to-input-iterators>
+	[lexicographicalcomparecpp]: <https://en.cppreference.com/w/cpp/algorithm/lexicographical_compare>
+	[lexicographicalcomparecplusplus]: <https://cplusplus.com/reference/algorithm/lexicographical_compare/>

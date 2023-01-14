@@ -100,7 +100,7 @@ namespace ft
 			temp.array -= r;
 			return(temp);
 		};
-		//void	operator[](){};
+		void	operator[](difference_type n){return(array[n]);};
 	};
 
 	template <class T, class Allocator = std::allocator<T> >
