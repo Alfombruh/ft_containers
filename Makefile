@@ -1,7 +1,7 @@
 NAME = ft_containers
 CC = c++
 CFLAGS = -fsanitize=address -g3 #-Werror -Wall -Wextra
-FILES = main
+FILES = main/main
 
 SRCS = $(addsuffix .cpp,$(FILES))
 OBJS = $(addsuffix .o,$(FILES))
@@ -15,6 +15,10 @@ all: $(NAME)
 
 $(NAME): $(OBJS) $(INCLUDES)
 	$(CC) $(CFLAGS) -I $(INCLUDES) $(OBJS) -o $@
+
+vector: main/vectormain.cpp
+	$(CC) $(CFLAGS) -c main/vectormain.cpp -o main/vectormain.o 
+	$(CC) $(CFLAGS) -I $(INCLUDES) main/mainvector.o -o ft_vector
 
 clean:
 	rm -rf $(OBJS)
