@@ -17,14 +17,25 @@ $(NAME): $(OBJS) $(INCLUDES)
 	$(CC) $(CFLAGS) -I $(INCLUDES) $(OBJS) -o $@
 
 vector: main/vectormain.cpp
-	$(CC) $(CFLAGS) -c main/vectormain.cpp -o main/vectormain.o 
-	$(CC) $(CFLAGS) -I $(INCLUDES) main/mainvector.o -o ft_vector
+	$(CC) $(CFLAGS) -I $(INCLUDES) -c main/vectormain.cpp -o main/vectormain.o 
+	$(CC) $(CFLAGS) -I $(INCLUDES) main/vectormain.o -o ft_vector
+
+test: main/test.cpp
+	$(CC) $(CFLAGS) -I $(INCLUDES) -c main/test.cpp -o main/test.o 
+	$(CC) $(CFLAGS) -I $(INCLUDES) main/test.o -o ft_test
+
+reverseit: main/reverseitmain.cpp
+	$(CC) $(CFLAGS) -I $(INCLUDES) -c main/reverseitmain.cpp -o main/reverseitmain.o 
+	$(CC) $(CFLAGS) -I $(INCLUDES) main/reverseitmain.o -o ft_reverseit
+
 
 clean:
 	rm -rf $(OBJS)
+	rm -rf main/vectormain.o main/test.o
 
 fclean: clean
 	rm -rf $(NAME)
+	rm -rf ft_vector ft_test
 
 re: fclean all
 

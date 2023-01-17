@@ -4,6 +4,7 @@
 #include "iterator.hpp"
 #include "enable_if.hpp"
 #include "is_integral.hpp"
+#include "reverse_iterator.hpp"
 
 
 #include <memory>
@@ -43,30 +44,31 @@ namespace ft
 		//operator
 		bool	operator==(const iterator &r){return (array == r.array? true : false);};
 		bool		operator!=(const iterator &r){return (array == r.array? false : true);};
-		value_type  operator*(){return(*array);};
-		void	operator=(const iterator &r)
+		reference  operator*()const {return(*array);};
+		iterator	&operator=(const iterator &r)
 		{
 			array = r.array;
+			return (*this);
 		};
-		iterator	operator++(void)
+		iterator	&operator++(void)
 		{
-			array++;
+			++array;
 			return (*this);
 		}
 		iterator	operator++(int)
 		{
-			iterator temp(this);
+			iterator temp = *this;
 			array++;
 			return (temp);
 		};
-		iterator	operator--(void)
+		iterator	&operator--(void)
 		{
-			array--;
+			--array;
 			return (*this);
 		};
 		iterator	operator--(int)
 		{
-			iterator	temp(this);
+			iterator	temp = *this ;
 			array--;
 			return (temp);
 		};
@@ -100,7 +102,7 @@ namespace ft
 			temp.array -= r;
 			return(temp);
 		};
-		void	operator[](difference_type n){return(array[n]);};
+		reference	operator[](difference_type n){return(array[n]);};
 	};
 
 	template <class T, class Allocator = std::allocator<T> >
@@ -122,10 +124,8 @@ namespace ft
 		typedef typename allocator_type::const_pointer const_pointer;
 		typedef typename ft::iterator<vector> iterator;
 		typedef typename ft::iterator<const vector> const_iterator;
-		//typedef a reverse_iterator<iterator>	reverse_iterator;
-		//typedef a reverse_iterator<const iterator>  const_reverse_iterator;
-		//typedef a iterator_traits<iterator>::diffference_type(same as ptrdiff_t)  difference_type;
-		//typedef size_t size_type;
+		typedef typename ft::reverse_iterator<iterator>	reverse_iterator;
+		typedef	typename ft::reverse_iterator<const iterator>  const_reverse_iterator;
 
 	public:
 		// constructors (https://en.cppreference.com/w/cpp/container/vector/vector)
@@ -141,8 +141,10 @@ namespace ft
 		explicit vector(size_type count, const T &value, const Allocator &alloc = Allocator())
 		{
 			array = (T *)allocate.allocate(sizeof(T) * count);
-			for (int i = 0; i < count; i++)
+			size = count;
+			for (int i = 0; i < count; i++){
 				array[i] = value;
+			}
 		};
 		template <class InputIt >
 		vector(InputIt first, InputIt last, const Allocator &alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type * = 0) {
@@ -179,12 +181,12 @@ namespace ft
 		const reference at(size_type n) const {
 
 		};
-
+		//Iterator methods
 		iterator begin()
 		{
 			return (iterator(this->array));
 		};
-		const_iterator begin() const
+		const_iterator cbegin() const
 		{
 			return (const_iterator(this->array));
 		};
@@ -192,9 +194,26 @@ namespace ft
 		{
 			return (iterator(this->array + this->size));
 		};
-		const_iterator end() const
+		const_iterator cend() const
 		{
 			return (const_iterator(this->array + this->size));
+		};
+		//reverse_iterator methods
+		reverse_iterator rbegin()
+		{
+			return (reverse_iterator(this->array + this->size));
+		};
+		const_reverse_iterator crbegin() const
+		{
+			return (const_reverse_iterator(this->array + this->size));
+		};
+		reverse_iterator rend()
+		{
+			return (reverse_iterator(this->array));
+		};
+		const_reverse_iterator crend() const
+		{
+			return (const_reverse_iterator(this->array));
 		};
 	};
 };
