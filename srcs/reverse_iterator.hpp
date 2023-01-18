@@ -21,20 +21,30 @@ namespace ft
 		iterator_type array;
 
 	public:
-		// constructors https://cplusplus.com/reference/iterator/reverse_iterator/reverse_iterator/
+	// constructors https://cplusplus.com/reference/iterator/reverse_iterator/reverse_iterator/
 		reverse_iterator() : array(0){};
 		explicit reverse_iterator(iterator_type x) : array(x){};
 		template <class U>
 		reverse_iterator(const reverse_iterator<U> &other) : array(other.array){};
-
+	//methods
 		iterator_type base() const { return (this->array); };
-
+	//operators 0
 		reference operator*() const
 		{
 			iterator_type tmp = array;
 			return (*(--tmp));
 		};
+		reference operator[](difference_type n) const // https://cplusplus.com/reference/iterator/reverse_iterator/operator[]/
+		{
+			return (base() - n - 1);
+		};
+		pointer operator->() const { return &(operator*()); };
+	//operators 1
 		reverse_iterator operator+(difference_type n) const { return (base() - n + 1); };
+		reverse_iterator operator-(difference_type n) const { return (base() + n + 1); };
+		reverse_iterator &operator-=(difference_type n) { return (base() + n); };
+		reverse_iterator &operator+=(difference_type n) { return (base() - n); };
+	//operators 2
 		reverse_iterator &operator--()
 		{
 			++array;

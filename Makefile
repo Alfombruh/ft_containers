@@ -35,7 +35,7 @@ clean:
 
 fclean: clean
 	rm -rf $(NAME)
-	rm -rf ft_vector ft_test
+	rm -rf ft_vector ft_test ft_reverseit
 
 re: fclean all
 
