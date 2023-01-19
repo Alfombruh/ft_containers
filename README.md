@@ -11,6 +11,8 @@
 ## To-Do List <a name="todo"></a>
 
 -	reverse_iterator
+	- assign
+	- insert
 -	vector
 -	stack
 -	binary tree
@@ -71,6 +73,7 @@ Some Links I used are:
 1.	[How to use SFINAE to restrict overload to input iterators][How to use SFINAE to restrict overload to input iterators]
 2.	[std::enable_if to conditionally compile a member function][std::enable_if to conditionally compile a member function]
 3.	[select class constructor using enable_if][select class constructor using enable_if]
+4.	[An enable if medium really cool post][enableifmedium]
 
 ## Lexicographical Compare
 
@@ -106,3 +109,4 @@ Comeme el culo
 	[How to use SFINAE to restrict overload to input iterators]: <https://stackoverflow.com/questions/25668966/how-to-use-sfinae-to-restrict-overload-to-input-iterators>
 	[lexicographicalcomparecpp]: <https://en.cppreference.com/w/cpp/algorithm/lexicographical_compare>
 	[lexicographicalcomparecplusplus]: <https://cplusplus.com/reference/algorithm/lexicographical_compare/>
+	[enableifmedium]: <https://medium.com/@sidbhasin82/c-templates-what-is-std-enable-if-and-how-to-use-it-fd76d3abbabe>

@@ -42,9 +42,11 @@ namespace ft
 		};
 
 		// operator
-		bool operator==(const iterator &r) { return (array == r.array ? true : false); };
-		bool operator!=(const iterator &r) { return (array == r.array ? false : true); };
+		bool operator==(const iterator &r) { return (*array == *r.array ? true : false); };
+		bool operator!=(const iterator &r) { return (*array == *r.array ? false : true); };
 		reference operator*() const { return (*array); };
+		reference operator->() const { return (array); };
+
 		iterator &operator=(const iterator &r)
 		{
 			array = r.array;
@@ -72,8 +74,8 @@ namespace ft
 			array--;
 			return (temp);
 		};
-		difference_type operator+(iterator const &r) { return (r.array + array); };
-		difference_type operator-(iterator const &r) { return (r.array - array); };
+		difference_type operator+(iterator const &r) { return (*r.array + *array); };
+		difference_type operator-(iterator const &r) { return (*r.array - *array); };
 		iterator &operator+(difference_type const &r)
 		{
 			iterator temp = *this;
@@ -123,7 +125,7 @@ namespace ft
 		typedef typename ft::reverse_iterator<const iterator> const_reverse_iterator;
 
 	private:
-		T *array;
+		value_type *array;
 		Allocator allocate;
 		size_type _capacity;
 		size_type _size;
@@ -159,11 +161,13 @@ namespace ft
 			exit(1);
 			InputIt temp = first;
 			_max_size = allocate.max_size();
-			// while(first != last)
-			// 	first++
-
 		};
-		vector(const vector &other);
+		vector(const vector &other) : _size(other._size), _max_size(other._max_size), _capacity(other._capacity), allocate(other.allocate)
+		{
+			array = allocate.allocate(other._capacity);
+			for (unsigned long ul = 0; ul < other._size; ul++)
+				allocate.construct(array + ul, *(other.array + ul));
+		};
 		// destructors (https://en.cppreference.com/w/cpp/container/vector/~vector)
 		~vector(void)
 		{
@@ -173,17 +177,12 @@ namespace ft
 		// operators
 		vector &operator=(const vector &other) //(https://en.cppreference.com/w/cpp/container/vector/operator%3D)
 		{
-			_size = other._size;
-			_max_size = other._max_size;
-			_capacity = other._capacity;
-			allocate = other.allocate;
-			array = allocate.allocate(other._capacity);
-			for (unsigned long ul = 0; ul < other._size; ul++)
-				allocate.construct(array + ul, *(other.array + ul));
+			vector temp(other);
+			temp.swap(*this);
 			return (*this);
 		};
 		// member fucntions-methods
-		// assing (https://cplusplus.com/reference/vector/vector/assign/)
+		// assign (https://cplusplus.com/reference/vector/vector/assign/)
 		template <class InputIterator>
 		void assign(InputIterator first, InputIterator last){
 
@@ -191,16 +190,40 @@ namespace ft
 		void assign(size_type n, const value_type &val){
 
 		};
+
+		void swap(vector &other)
+		{
+			vector<T> temp(other);
+			other.clear();
+			other.allocate.deallocate(other.array, temp._size);
+			other._size = _size;
+			other._capacity = _capacity;
+			other._max_size = _max_size;
+			other.allocate = allocate;
+			other.array = other.allocate.allocate(_capacity);
+			for (unsigned long ul = 0; ul < _size; ul++)
+				other.allocate.construct(other.array + ul, *(array + ul));
+			clear();
+			allocate.deallocate(array, _capacity);
+			_size = temp._size;
+			_capacity = temp._capacity;
+			_max_size = temp._max_size;
+			allocate = temp.allocate;
+			array = allocate.allocate(_capacity);
+			for (unsigned long ul = 0; ul < _size; ul++)
+				allocate.construct(array + ul, *(temp.array + ul));
+		};
 		// at (https://cplusplus.com/reference/vector/vector/at/)
 		reference at(size_type n)
 		{
-			//if (n >= _size)
-				//throw (std::out_of_range("vector"));
+			if (n >= _size)
+				throw(std::out_of_range("vector"));
 			return (*(array + n));
 		}
-		const_reference at(size_type n) const {
-			//if (n >= _size)
-				//throw (std::out_of_range("vector"));
+		const_reference at(size_type n) const
+		{
+			if (n >= _size)
+				throw(std::out_of_range("vector"));
 			return (*(array + n));
 		};
 		// Iterator methods
@@ -214,41 +237,61 @@ namespace ft
 		reverse_iterator rend() { return (reverse_iterator(this->array)); };
 		const_reverse_iterator crend() const { return (const_reverse_iterator(this->array)); };
 
-		void push_back(const T &value)
+		void resize (size_type n, value_type val = value_type())
 		{
-			if ( _size + 1 > _max_size )
+			if (n > max_size())
+				throw (std::length_error("me voy ac agar\n")); //TODO
+			if (n < _size)
+			{
+				for (unsigned long aingeru = n; aingeru < _size ; aingeru++)
+					allocate.destroy(array + aingeru);
+				_size = n;
+				return ;
+			}
+			vector temp(*this);
+			clear();
+			allocate.deallocate(array, _capacity);
+			array = allocate.allocate(n);
+			for (unsigned long ul = 0; ul < n; ul++)
+				allocate.construct(array + ul, *(temp.array + ul));
+			_size = n;
+		};
+
+		void reserve( size_type n )
+		{
+			if (n > max_size())
+				throw (std::length_error("me voy ac agar\n")); //TODO
+			if (n <= _capacity)
+				return ;
+			vector temp(*this);
+			clear();
+			allocate.deallocate(array, _capacity);
+			array = allocate.allocate(n);
+			for (unsigned long ul = 0; ul < temp._size; ul++)
+				allocate.construct(array + ul, *(temp.array + ul));
+			_size = temp._size;
+			_capacity = n;
+		};
+
+		void push_back(const value_type &value)
+		{
+			if (_size + 1 > max_size())
 				throw(std::out_of_range("max_size_error\n"));
 			if (!(_size + 1 > _capacity))
 			{
-				allocate.construct(_size + 1, array);
+				allocate.construct(array + _size, value);
 				_size += 1;
-				return ;
+				return;
 			}
-			vector temp = *this;
-			if (this->_capacity != 0)
-			{
-				clear();
-				allocate.deallocate(_capacity);
-			}
-			if (temp._capacity == 0)
-			{
-				array = allocate.allocate(1);
-				_capacity = 1;
-			}
-			else{
-				array = allocate.allocate(temp._capacity * 2);
-				for (unsigned long ul; ul < temp._size; ul++)
-					allocate.construct(array + ul, *(temp.array + ul));
-				allocate.construct(array + temp._size + 1, value);
-				_capacity = temp._capacity * 2;
-			}
-			_size = temp.size + 1;
-			//gonna fix and tidy this up
+			reserve(_capacity * 2);
+			resize(_size + 1);
+			allocate.construct(array + _size - 1, value);
 		};
+
 
 		size_type size() const { return (_size); };
 		size_type max_size(void) const { return (sizeof(value_type) == 1 ? (_max_size / 2) : (_max_size)); };
-		size_type capacity() const { return (capacity); };
+		size_type capacity() const { return (_capacity); };
 		void clear()
 		{
 			for (unsigned long ul = 0; ul < _size; ul++)
@@ -256,6 +299,8 @@ namespace ft
 			_size = 0;
 		};
 	};
+	template <class T, class Alloc>
+	void swap(vector<T, Alloc> &x, vector<T, Alloc> &y) { x.swap(y); };
 };
 
 #endif

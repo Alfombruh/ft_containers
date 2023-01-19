@@ -9,9 +9,14 @@ using std::cout;
 
 int main()
 {
-    ft::vector<char> sexo(10, 'c');
-    sexo.clear();
-    for (unsigned long ul = 0; ul < 10; ul++)
-        cout << sexo.at(ul) << "\n";
+    ft::vector<int> test(1, 1);
+
+
+    test.push_back(2);
+    cout << "size is:   " << test.size() << " and capacity is: " << test.capacity() << "\n";
+    cout << "at 2 is: " << test.at(1) << "\n";
+    test.push_back(3);
+    cout << "size is:   " << test.size() << " and capacity is: " << test.capacity() << "\n";
+    cout << "at 3 is: " << test.at(2) << "\n";
     return (0);
 }
