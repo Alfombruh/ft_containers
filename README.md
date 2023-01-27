@@ -12,10 +12,10 @@
 
 - Vector
 	- constructors 
-		- alloc constructor
-		- iterator constructor
+		- alloc constructor //same ?
+		- iterator constructor //may have done it
 	- Basic
-		- assign (all)
+		- assign (all) (done?)
 	- Modifiers
 		- insert (all)
 		- erase (all)

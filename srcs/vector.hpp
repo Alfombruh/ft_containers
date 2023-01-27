@@ -126,20 +126,17 @@ namespace ft
 		typedef typename ft::reverse_iterator<iterator> reverse_iterator;
 		typedef typename ft::reverse_iterator<const iterator> const_reverse_iterator;
 
-	private:
+	private: // private atributes
 		value_type *array;
 		Allocator allocate;
 		size_type _capacity;
 		size_type _size;
 		size_type _max_size;
 
-	public:
+	public: // methods
 		////////////////////Cons/Destructors////////////////////
 		vector(void) : _size(0), _capacity(0), _max_size(allocate.max_size()), array((T *)allocate.allocate(sizeof(T) * 0)){};
-		explicit vector(const Allocator &alloc)
-		{
-			allocate(alloc);
-		};
+		explicit vector(const Allocator &alloc): array(alloc.allocate()){};
 		explicit vector(size_type count, const T &value, const Allocator &alloc = Allocator())
 		{
 			array = (T *)allocate.allocate(sizeof(T) * count);
@@ -152,9 +149,12 @@ namespace ft
 		template <class InputIt>
 		vector(InputIt first, InputIt last, const Allocator &alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type * = 0)
 		{
-			exit(1);
-			InputIt temp = first;
+			array = allocate.allocate(0);
 			_max_size = allocate.max_size();
+			_size = 0;
+			_capacity = 0;
+			for (InputIt it = first; it != last; it++)
+				push_back(*it);
 		};
 		vector(const vector &other) : _size(other._size), _max_size(other._max_size), _capacity(other._capacity), allocate(other.allocate)
 		{
@@ -165,7 +165,6 @@ namespace ft
 		~vector(void)
 		{
 			allocate.deallocate(array, _capacity);
-			//	std::cout << "Just Deleted\n";
 		};
 
 		////////////////////Basic////////////////////
@@ -175,18 +174,20 @@ namespace ft
 			temp.swap(*this);
 			return (*this);
 		};
-		template <class InputIterator>
-		void assign(InputIterator first, InputIterator last){
-			// this does weird things dude TODO
-			// for (InputIterator it = first; first != last; first++)
-			//	allocate.construct(array );
-		};
 		void assign(size_type n, const value_type &val)
 		{
 			clear();
-			resize(n);
-			for (size_type sexo = 0; sexo < n; sexo++)
-				allocate.construct(array + sexo, val);
+			// this can probably be done with a for loop  with push_back >:)
+			while (n > _capacity)
+				reserve(_capacity * 2);
+			for (size_type count = 0; count < n; count++)
+				allocate.construct(array + n, val);
+		};
+		template <class InputIterator>
+		void assign(InputIterator first, InputIterator last){
+			clear();
+			for (InputIterator start = first; start != last; start++)
+				push_back(*start);
 		};
 		allocator_type get_allocator() const { return (allocate); };
 
