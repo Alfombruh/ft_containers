@@ -10,10 +10,17 @@
 ---
 ## To-Do List <a name="todo"></a>
 
--	reverse_iterator
-	- assign
-	- insert
--	vector
+- Vector
+	- constructors 
+		- alloc constructor
+		- iterator constructor
+	- Basic
+		- assign (all)
+	- Modifiers
+		- insert (all)
+		- erase (all)
+		- pop_back
+
 -	stack
 -	binary tree
 -	map

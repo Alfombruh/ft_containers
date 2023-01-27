@@ -21,14 +21,18 @@ int main()
 	// for (ft::vector<int>::iterator it = test.begin(); it < test.end(); it++)
 	// 	cout << *it << " ";
 	// cout << "\n";
-	ft::vector<int> sexo(1, 5);
-	sexo.push_back(9);
-	sexo.push_back(57);
-	sexo.push_back(45);
-	sexo.push_back(78);
-	sexo.erase(sexo.end());
-	//sexo.erase(sexo.begin() + 1, sexo.end() -1);
-	for (ft::vector<int>::iterator it = sexo.begin(); it != sexo.end(); it++)
-		cout << *it << "\n";
+	// ft::vector<int> sexo(1, 5);
+	// sexo.push_back(9);
+	// sexo.push_back(57);
+	// sexo.push_back(45);
+	// sexo.push_back(78);
+	// sexo.erase(sexo.end());
+	// //sexo.erase(sexo.begin() + 1, sexo.end() -1);
+	// for (ft::vector<int>::iterator it = sexo.begin(); it != sexo.end(); it++)
+	// 	cout << *it << "\n";
+	std::vector<int> test;
+	for (unsigned long ul = 0; ul < 100; ul++)
+		test.push_back(ul);
+	cout << *(test.begin() + 10) << "\n";
 	return (0);
 }

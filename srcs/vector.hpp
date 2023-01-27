@@ -4,7 +4,9 @@
 #include "iterator.hpp"
 #include "enable_if.hpp"
 #include "is_integral.hpp"
-#include "reverse_iterator.hpp" 
+#include "reverse_iterator.hpp"
+#include "equal.hpp"
+#include "lexicographical_compare.hpp"
 
 #include <memory>
 #include <iostream>
@@ -132,16 +134,8 @@ namespace ft
 		size_type _max_size;
 
 	public:
-		// constructors (https://en.cppreference.com/w/cpp/container/vector/vector)
-		vector(void)
-		{
-			array = (T *)allocate.allocate(sizeof(T) * 0);
-			_size = 0;
-			_capacity = 0;
-			_max_size = allocate.max_size();
-			std::cout << "max_size: " << _max_size << "\n";
-			std::cout << "Just Allocated\n";
-		};
+		////////////////////Cons/Destructors////////////////////
+		vector(void) : _size(0), _capacity(0), _max_size(allocate.max_size()), array((T *)allocate.allocate(sizeof(T) * 0)){};
 		explicit vector(const Allocator &alloc)
 		{
 			allocate(alloc);
@@ -168,83 +162,177 @@ namespace ft
 			for (unsigned long ul = 0; ul < other._size; ul++)
 				allocate.construct(array + ul, *(other.array + ul));
 		};
-		// destructors (https://en.cppreference.com/w/cpp/container/vector/~vector)
 		~vector(void)
 		{
 			allocate.deallocate(array, _capacity);
-		//	std::cout << "Just Deleted\n";
+			//	std::cout << "Just Deleted\n";
 		};
-		// operators
-		vector &operator=(const vector &other) //(https://en.cppreference.com/w/cpp/container/vector/operator%3D)
+
+		////////////////////Basic////////////////////
+		vector &operator=(const vector &other)
 		{
 			vector temp(other);
 			temp.swap(*this);
 			return (*this);
 		};
-		// member fucntions-methods
-		// assign (https://cplusplus.com/reference/vector/vector/assign/)
 		template <class InputIterator>
 		void assign(InputIterator first, InputIterator last){
 			// this does weird things dude TODO
-			//for (InputIterator it = first; first != last; first++)
+			// for (InputIterator it = first; first != last; first++)
 			//	allocate.construct(array );
 		};
-		void assign(size_type n, const value_type &val){
+		void assign(size_type n, const value_type &val)
+		{
 			clear();
 			resize(n);
-			for (size_type	sexo = 0; sexo < n; sexo++)
+			for (size_type sexo = 0; sexo < n; sexo++)
 				allocate.construct(array + sexo, val);
 		};
+		allocator_type get_allocator() const { return (allocate); };
 
-		iterator insert (iterator position, const value_type& val)
+		// at (https://cplusplus.com/reference/vector/vector/at/)
+		reference at(size_type n)
 		{
+			if (n >= _size)
+				throw(std::out_of_range("vector"));
+			return (*(array + n));
+		}
+		const_reference at(size_type n) const
+		{
+			if (n >= _size)
+				throw(std::out_of_range("vector"));
+			return (*(array + n));
+		};
+		////////////////////Element access////////////////////
+		reference operator[](size_type pos) { return (at(pos)); };
+		const_reference operator[](size_type pos) const { return (at(pos)); };
+
+		reference front() { return (at(0)); };
+		const_reference front() const { return (at(0)); };
+
+		reference back() { return (at(_size - 1)); };
+		const_reference back() const { return (at(_size - 1)); };
+
+		T *data() { return (_size == 0 ? NULL : array); };
+		const T *data() const { return (_size == 0 ? NULL : array); };
+
+		////////////////////Iterator methods////////////////////
+		iterator begin() { return (iterator(this->array)); };
+		const_iterator cbegin() const { return (const_iterator(this->array)); };
+		iterator end() { return (iterator(this->array + this->_size)); };
+		const_iterator cend() const { return (const_iterator(this->array + this->_size)); };
+		reverse_iterator rbegin() { return (reverse_iterator(this->array + this->_size)); };
+		const_reverse_iterator crbegin() const { return (const_reverse_iterator(this->array + this->_size)); };
+		reverse_iterator rend() { return (reverse_iterator(this->array)); };
+		const_reverse_iterator crend() const { return (const_reverse_iterator(this->array)); };
+
+		////////////////////Capacity////////////////////
+		bool empty() const { return (begin() == end() ? true : false); };
+		size_type size() const { return (_size); };
+		size_type max_size(void) const { return (sizeof(value_type) == 1 ? (_max_size / 2) : (_max_size)); };
+		void reserve(size_type n)
+		{
+			if (n > max_size())
+				throw(std::length_error("me voy ac agar\n")); // TODO
+			if (n <= _capacity)
+				return;
 			vector temp(*this);
-			unsigned long start = 0, end = temp._size + 1;
 			clear();
-			if (_size + 1 > capacity)
-				reserve(_capacity * 2);
-			while (start != end)
-			{
-				allocate.construct()
-			}
+			_size = temp._size;
+			allocate.deallocate(array, _capacity);
+			_capacity = n;
+			array = allocate.allocate(n);
+			for (unsigned long ul = 0; ul < temp._size; ul++)
+				allocate.construct(array + ul, *(temp.array + ul));
 		};
-		void insert (iterator position, size_type n, const value_type& val)
+		size_type capacity() const { return (_capacity); };
+
+		////////////////////Modifiers////////////////////
+		void clear()
 		{
-
+			for (unsigned long ul = 0; ul < _size; ul++)
+				allocate.destroy(array + ul);
+			_size = 0;
 		};
-		template <class InputIterator>
-		void insert (iterator position, InputIterator first, InputIterator last)
-		{
-
-		};
-
-		iterator erase (iterator position)
+		iterator insert(iterator position, const value_type &val)
 		{
 			vector temp(*this);
-			unsigned long ul = temp.begin() + position;
+			clear();
+			unsigned long pos = temp.begin() + position;
+			std::cout << pos << "\n";
+			if (_size + 1 > _capacity)
+				reserve(_capacity * 2);
+			for (iterator it = temp.begin(); it != position; it++)
+				allocate.construct(array);
+		};
+		void insert(iterator position, size_type n, const value_type &val){};
+		template <class InputIterator>
+		void insert(iterator position, InputIterator first, InputIterator last){};
+		iterator erase(iterator position)
+		{
+			vector temp(*this);
+			unsigned long ul = 0;
+
 			clear();
 			_size = temp._size - 1;
-			for (unsigned long sexo = 0, count = 0; sexo < temp._size; sexo++)
+			for (iterator it = temp.begin(); it != temp.end(); it++)
 			{
-				if (sexo != ul)
-					allocate.construct(array + count++, temp.at(sexo));
+				allocate.construct(array, temp);
 			}
 			return (temp.begin() + ul);
 		};
-		iterator erase (iterator first, iterator last)
+		iterator erase(iterator first, iterator last)
 		{
 			vector temp(*this);
 			unsigned long start = temp.begin() + first;
 			unsigned long end = temp.begin() + last;
 			clear();
-			for (unsigned long count = 0, stop = temp._size - 1, pos = 0; count != stop ; count++)
+			for (unsigned long count = 0, stop = temp._size - 1, pos = 0; count != stop; count++)
 			{
 				if ((count >= start && count <= end))
 					allocate.construct(array + pos++, temp.at(count));
 			}
 			return (begin() + start);
-		};///////////////////////////////////////////////////////TODO
-
+		}; ///////////////TODO
+		void push_back(const value_type &value)
+		{
+			if (_size + 1 > max_size())
+				throw(std::out_of_range("max_size_error\n"));
+			if (_size + 1 > _capacity)
+			{
+				// std::cout << "first case\n";
+				reserve(_capacity * 2);
+				allocate.construct(array + _size, value);
+				_size += 1;
+				return;
+			}
+			// std::cout << "second case\n" << _size << "\n";
+			// resize(_size + 1);
+			allocate.construct(array + _size, value);
+			_size += 1;
+		};
+		void pop_back(){};
+		void resize(size_type n, value_type val = value_type())
+		{
+			if (n > max_size())
+				throw(std::length_error("me voy ac agar\n")); // TODO
+			if (n <= _size)
+			{
+				for (unsigned long aingeru = n; aingeru < _size; aingeru++)
+					allocate.destroy(array + aingeru);
+				_size = n;
+				return;
+			}
+			vector temp(*this);
+			clear();
+			allocate.deallocate(array, _capacity);
+			array = allocate.allocate(n);
+			for (unsigned long ul = 0; ul < n; ul++)
+				allocate.construct(array + ul, *(temp.array + ul));
+			// allocate.construct(array + size, val);
+			_capacity = n;
+			_size = n;
+		};
 		void swap(vector &other)
 		{
 			vector<T> temp(other);
@@ -267,98 +355,21 @@ namespace ft
 			for (unsigned long ul = 0; ul < _size; ul++)
 				allocate.construct(array + ul, *(temp.array + ul));
 		};
-		// at (https://cplusplus.com/reference/vector/vector/at/)
-		reference at(size_type n)
-		{
-			if (n >= _size)
-				throw(std::out_of_range("vector"));
-			return (*(array + n));
-		}
-		const_reference at(size_type n) const
-		{
-			if (n >= _size)
-				throw(std::out_of_range("vector"));
-			return (*(array + n));
-		};
-		// Iterator methods
-		iterator begin() { return (iterator(this->array)); };
-		const_iterator cbegin() const { return (const_iterator(this->array)); };
-		iterator end() { return (iterator(this->array + this->_size)); };
-		const_iterator cend() const { return (const_iterator(this->array + this->_size)); };
-		// reverse_iterator methods
-		reverse_iterator rbegin() { return (reverse_iterator(this->array + this->_size)); };
-		const_reverse_iterator crbegin() const { return (const_reverse_iterator(this->array + this->_size)); };
-		reverse_iterator rend() { return (reverse_iterator(this->array)); };
-		const_reverse_iterator crend() const { return (const_reverse_iterator(this->array)); };
-
-		void resize(size_type n, value_type val = value_type())
-		{
-			if (n > max_size())
-				throw(std::length_error("me voy ac agar\n")); // TODO
-			if (n <= _size)
-			{
-				for (unsigned long aingeru = n; aingeru < _size; aingeru++)
-					allocate.destroy(array + aingeru);
-				_size = n;
-				return;
-			}
-			vector temp(*this);
-			clear();
-			allocate.deallocate(array, _capacity);
-			array = allocate.allocate(n);
-			for (unsigned long ul = 0; ul < n; ul++)
-				allocate.construct(array + ul, *(temp.array + ul));
-			//allocate.construct(array + size, val);
-			_capacity = n;
-			_size = n;
-		};
-
-		void reserve(size_type n)
-		{
-			if (n > max_size())
-				throw(std::length_error("me voy ac agar\n")); // TODO
-			if (n <= _capacity)
-				return;
-			vector temp(*this);
-			clear();
-			_size = temp._size;
-			allocate.deallocate(array, _capacity);
-			_capacity = n;
-			array = allocate.allocate(n);
-			for (unsigned long ul = 0; ul < temp._size; ul++)
-				allocate.construct(array + ul, *(temp.array + ul));
-		};
-
-		void push_back(const value_type &value)
-		{
-			if (_size + 1 > max_size())
-				throw(std::out_of_range("max_size_error\n"));
-			if (_size + 1 > _capacity)
-			{
-				//std::cout << "first case\n";
-				reserve(_capacity * 2);
-				allocate.construct(array + _size, value);
-				_size += 1;
-				return;
-			}
-			//std::cout << "second case\n" << _size << "\n";
-			//resize(_size + 1);
-			allocate.construct(array + _size, value);
-			_size += 1;
-		};
-
-		size_type size() const { return (_size); };
-		size_type max_size(void) const { return (sizeof(value_type) == 1 ? (_max_size / 2) : (_max_size)); };
-		size_type capacity() const { return (_capacity); };
-		void clear()
-		{
-			for (unsigned long ul = 0; ul < _size; ul++)
-				allocate.destroy(array + ul);
-			_size = 0;
-		};
 	};
 	template <class T, class Alloc>
 	void swap(vector<T, Alloc> &x, vector<T, Alloc> &y) { x.swap(y); };
+	template <class T, class Alloc>
+	bool operator==(const std::vector<T, Alloc> &lhs, const std::vector<T, Alloc> &rhs) { return (std::equal(lhs.begin(), lhs.end(), rhs.begin())); };
+	template <class T, class Alloc>
+	bool operator!=(const std::vector<T, Alloc> &lhs, const std::vector<T, Alloc> &rhs) { return !(lhs == rhs); };
+	template <class T, class Alloc>
+	bool operator<(const std::vector<T, Alloc> &lhs, const std::vector<T, Alloc> &rhs) { return (std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); };
+	template <class T, class Alloc>
+	bool operator>(const std::vector<T, Alloc> &lhs, const std::vector<T, Alloc> &rhs) { return (rhs < lhs); };
+	template <class T, class Alloc>
+	bool operator<=(const std::vector<T, Alloc> &lhs, const std::vector<T, Alloc> &rhs) { return !(rhs < lhs); };
+	template <class T, class Alloc>
+	bool operator>=(const std::vector<T, Alloc> &lhs, const std::vector<T, Alloc> &rhs) { return !(lhs < rhs); };
 };
 
 #endif
