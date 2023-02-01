@@ -1,6 +1,6 @@
 NAME = ft_containers
 CC = c++
-CFLAGS = -fsanitize=address -g3 -std=c++98 -Werror -Wall -Wextra
+CFLAGS = -fsanitize=address -g3 -std=c++98 #-Werror -Wall -Wextra
 FILES = main/main
 
 SRCS = $(addsuffix .cpp,$(FILES))

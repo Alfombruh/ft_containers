@@ -135,22 +135,23 @@ namespace ft
 
 	public: // methods
 		////////////////////Cons/Destructors////////////////////
-		vector(void) : _size(0), _capacity(0), _max_size(allocate.max_size()), array((T *)allocate.allocate(sizeof(T) * 0)){};
+		vector(void) : _size(0), _capacity(0), _max_size(allocate.max_size()), allocate(Allocator()){};
 		explicit vector(const Allocator &alloc): array(alloc.allocate()){};
 		explicit vector(size_type count, const T &value, const Allocator &alloc = Allocator())
-		{
-			array = (T *)allocate.allocate(sizeof(T) * count);
+		{ 
+			allocate = alloc;
+			array = allocate.allocate(sizeof(T) * count);
 			_capacity = count;
 			_max_size = allocate.max_size();
 			_size = count;
 			for (int i = 0; i < count; i++)
-				array[i] = value;
+				allocate.construct(array + i, value);
 		};
 		template <class InputIt>
 		vector(InputIt first, InputIt last, const Allocator &alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type * = 0)
 		{
-			array = allocate.allocate(0);
-			_max_size = allocate.max_size();
+			array = alloc.allocate(0);
+			_max_size = alloc.max_size();
 			_size = 0;
 			_capacity = 0;
 			for (InputIt it = first; it != last; it++)
@@ -264,7 +265,7 @@ namespace ft
 			if (_size + 1 > _capacity)
 				reserve(_capacity * 2);
 			for (iterator it = temp.begin(); it != position; it++)
-				allocate.construct(array);
+				allocate.construct(array, val);
 		};
 		void insert(iterator position, size_type n, const value_type &val){};
 		template <class InputIterator>

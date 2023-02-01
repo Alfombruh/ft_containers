@@ -74,7 +74,7 @@ namespace ft
 	template <class Iterator1, class Iterator2>
 	bool operator!=(const std::reverse_iterator<Iterator1> &lhs, const std::reverse_iterator<Iterator2> &rhs) { return (rhs.array == lhs.array ? false : true); };
 	template <class Iterator1, class Iterator2>
-	bool operator<(const std::reverse_iterator<Iterator1> &lhs, const std::reverse_iterator<Iterator2> &rhs) { return (rhs.array < rhs.array ? true : false); };
+	bool operator<(const std::reverse_iterator<Iterator1> &lhs, const std::reverse_iterator<Iterator2> &rhs) { return (rhs.array < lhs.array ? true : false); };
 	template <class Iterator1, class Iterator2>
 	bool operator<=(const std::reverse_iterator<Iterator1> &lhs, const std::reverse_iterator<Iterator2> &rhs) { return (lhs.array <= rhs.array ? true : false); };
 	template <class Iterator1, class Iterator2>
