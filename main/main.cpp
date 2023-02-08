@@ -20,6 +20,49 @@ using std::cout;
 // 	return (temp);
 // }
 
+void vector_compare()
+{
+	cout << "||||||||||||||||||||||||||||||||||||||||||||PACO_COMPARE||||||||||||||||||||||||||||||||||||||||||||\n";
+	ft::vector<int> one(2, 5);
+	ft::vector<int> sec(2, 5);
+
+	cout << "Just made two equal vectors, the two with 2 numbers and those numbers are 5\n";
+	if (one == sec)
+		cout << "This prints if one == sec\n";
+	one.push_back(25);
+	one.push_back(25);
+	one.push_back(25);
+	sec.push_back(25);
+	sec.push_back(25);
+	sec.push_back(25);
+	cout << "Just pushed 3 25's to the two vectors, they are still equal\n";
+	if (one == sec)
+		cout << "This prints if they are still equal\n";
+	one.push_back(3);
+	one.push_back(33);
+	one.push_back(333);
+	sec.push_back(4);
+	sec.push_back(44);
+	sec.push_back(444);
+	cout << "Now pushed 3 33 333 into the first vecto and 4 44 444 into the second one\n";
+	if  (one != sec)
+		cout << "This shows if the vectors are not equal\n";
+	one.clear();
+	sec.clear();
+	one.push_back(3);
+	one.push_back(33);
+	one.push_back(333);
+	sec.push_back(3);
+	sec.push_back(33);
+	sec.push_back(333);
+	sec.push_back(3333);
+	cout << "Pushed 3 33 333 into the first vector and 3 33 333 3333 into the second one\n";
+	if (one != sec)
+		cout << "They are not equal\n";
+
+	//TODO < > <= >= algunoo mas
+}
+
 void vector_information(ft::vector<int> &vec)
 {
 	cout << "||||||||||||||||||||VECTOR|||||||||||||||||||||||||\n";
@@ -42,13 +85,52 @@ void segfault(ft::vector<int>  vec)
 		cout << *it << " ";
 }
 
+void	vector_insert()
+{
+	ft::vector<int> test;
+
+	for (size_t i = 0; i != 5; i++)
+		test.push_back(i);
+	vector_information(test);
+	
+	cout << *test.insert(test.begin() + 3, 20, 4);
+	vector_information(test);
+	std::vector<int> test2;
+
+	for (size_t i = 0; i != 5; i++)
+		test2.push_back(i);
+	//vector_information(test2);
+	
+	cout << *test2.insert(test2.begin() + 3, 20, 4);
+	//vector_information(test2);
+}
+
 int main()
 {
+	vector_insert();
+	// ft::vector<int> test;
+
+	// for (size_t count = 0; count < 23; count++)
+	// {
+	// 	cout << count << "\n";
+	// 	test.push_back(count);
+	// }
+	// cout << *test.erase(test.begin() + 5) << "\n";
+
+	// vector_compare();
+	// ft::vector<int> test;
+
+	// for (size_t i = 0; i < 20; i++)
+	// 	test.push_back(i);
+	// test.reserve(test.capacity() * 2);
+	// for (ft::vector<int>::iterator i = test.begin(); i != test.end(); i++)
+	// 	cout << *i << "\n";
+	return (1);
 	try
 	{
 		ft::vector<int> vec(2, 5);
 
-		segfault(vec);
+		//segfault(vec);
 		vector_information(vec);
 		vec.push_back(24);
 		vec.push_back(65);

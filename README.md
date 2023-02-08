@@ -19,7 +19,6 @@
 	- Modifiers
 		- insert (all)
 		- erase (all)
-		- pop_back
 
 -	stack
 -	binary tree
