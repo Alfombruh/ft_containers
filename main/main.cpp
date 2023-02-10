@@ -1,9 +1,11 @@
 #include "vector.hpp"
+#include "stack.hpp"
 #include <iostream>
 #include <cctype>
 #include "pair.hpp"
 #include <utility>
 #include <vector>
+#include <stack>
 
 using std::cout;
 
@@ -107,24 +109,8 @@ void	vector_insert()
 
 int main()
 {
-	vector_insert();
-	// ft::vector<int> test;
+	ft::stack<int> test;
 
-	// for (size_t count = 0; count < 23; count++)
-	// {
-	// 	cout << count << "\n";
-	// 	test.push_back(count);
-	// }
-	// cout << *test.erase(test.begin() + 5) << "\n";
-
-	// vector_compare();
-	// ft::vector<int> test;
-
-	// for (size_t i = 0; i < 20; i++)
-	// 	test.push_back(i);
-	// test.reserve(test.capacity() * 2);
-	// for (ft::vector<int>::iterator i = test.begin(); i != test.end(); i++)
-	// 	cout << *i << "\n";
 	return (1);
 	try
 	{
