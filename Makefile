@@ -16,7 +16,7 @@ all: $(NAME)
 $(NAME): $(OBJS) $(INCLUDES)
 	$(CC) $(CFLAGS) -I $(INCLUDES) $(OBJS) -o $@
 
-vector: main/vectormain.cpp
+vector: main/v_main.cpp
 	$(CC) $(CFLAGS) -I $(INCLUDES) -c main/vectormain.cpp -o main/vectormain.o 
 	$(CC) $(CFLAGS) -I $(INCLUDES) main/vectormain.o -o ft_vector
 
