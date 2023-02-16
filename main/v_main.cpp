@@ -109,8 +109,13 @@ void	vector_insert()
 
 int main()
 {
-	ft::stack<int> test;
+	ft::vector<int> test(2, 5);
+	std::vector<int> test2(2, 5);
 
+	if (test.size() != test2.size())
+		cout << "sezzo";
+	long _size = test.size();
+	size_t __size = test.size();
 	return (1);
 	try
 	{

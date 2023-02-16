@@ -17,8 +17,8 @@ $(NAME): $(OBJS) $(INCLUDES)
 	$(CC) $(CFLAGS) -I $(INCLUDES) $(OBJS) -o $@
 
 vector: main/v_main.cpp
-	$(CC) $(CFLAGS) -I $(INCLUDES) -c main/vectormain.cpp -o main/vectormain.o 
-	$(CC) $(CFLAGS) -I $(INCLUDES) main/vectormain.o -o ft_vector
+	$(CC) $(CFLAGS) -I $(INCLUDES) -c main/v_main.cpp -o main/v_main.o 
+	$(CC) $(CFLAGS) -I $(INCLUDES) main/v_main.o -o ft_vector
 
 test: main/test.cpp
 	$(CC) $(CFLAGS) -I $(INCLUDES) -c main/test.cpp -o main/test.o 

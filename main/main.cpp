@@ -10,9 +10,10 @@ using std::string;
 int main()
 {
 	int key = 1;
+	int key2 = 1512;
 	string value = "sexo";
+	string value2 = "sexo";
 	RBT<int, string> nuevo;
-	nuevo.insertNode(ft::pair<int, int>(2, 4));
 	nuevo.insertNode((key + 1), (value + " sexo2"));
 	nuevo.insertNode((key + 2), (value + " sexo3"));
 	nuevo.insertNode((key + 3), (value + " sexo4"));
@@ -21,7 +22,6 @@ int main()
 	nuevo.insertNode((key + 8), (value + " sexo8"));
 	nuevo.insertNode((key + 7), (value + " sexo7"));
 	nuevo.insertNode((key + 9), (value + " sexo9"));
-	nuevo.printRBT("", nuevo.list, false);
-	cout << nuevo.list->value.first << "\n";
+	nuevo.printAing();
 	return (0);
 }

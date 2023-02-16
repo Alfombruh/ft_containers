@@ -5,133 +5,151 @@
 #include <iostream>
 #include <memory>
 
+#define CRED	"\033[0;31m"
+#define CLOSE	"\033[0;0m"
+
 #define RED		false
 #define BLACK	true
+#define RIGHT	false;
+#define LEFT	true;
 
 template <class Key, class T>
 struct Node
 {
-	T							value;
-	Key							key;
+	ft::pair<Key, T>			pair;
 	Node						*left;
 	Node						*right;
 	Node						*parent;
 	bool						color;
 };
 
-
-
-template<class Key, class T>
+template<class Key, class T, class Compare = std::less<Key> ,  class Alloc = std::allocator<Node<Key, T> > >
 class RBT
 {
+	///////public definitions///////	
 	public:
+		typedef				Alloc							allocator_type;
+		typedef typename	allocator_type::size_type		size_type;
 		typedef typename	ft::pair<Key, T>				value_type;
-		typedef	typename	std::allocator<Node<Key, T> >	allocator_type;
-		typedef 			Node<Key, T>					Node;
+		typedef 			Node<Key, T>					node;
 		typedef				Node<Key, T>					*pointer;
-				
-	//private:
-		Node					*list;
+		typedef				Compare							key_compare;
+	///////private atributes///////	
+	private:
 		allocator_type			alloc;
-		Node					*current;
+		size_type 				_size; 
+		pointer					list;
+		key_compare				comp;
 
-		void firstNode(Node *firstNode)
+		pointer firstNode(node *firstNode)
 		{
 			firstNode->color = BLACK;
 			list = firstNode;
-			current = list;
-		}
+			_size += 1;
+			return (firstNode);
+		};
 
 	public:
-		RBT(): list(NULL), current(NULL) {};
+		RBT(): list(NULL), _size(0) {};
 		~RBT()
 		{
-
 		};//LIBERAR MEMORIA TODO
-		Node *createNode(value_type const &value)
+		pointer	createNode(const Key &key, T const &value)
 		{
-			Node *node = alloc.allocate(1);
-			node->value = value;
+			pointer	node = alloc.allocate(1);
+			node->pair.first = key;
+			node->pair.second = value;
 			node->parent = NULL;
 			node->left = NULL;
 			node->right = NULL;
-			node->color = RED;
+			node->color = RED; 
 			return (node);
-		}
-		void	insertNode(const &value_type value, Node *ptr = NULL )
+		};
+		pointer	insertNode(const Key &key ,const T &value = 0, pointer ptr = NULL )
 		{
-			Node *node = createNode(key, value);
+			node *node = createNode(key, value);
 			if (list == NULL)
+				return (firstNode(node));
+			if (!comp(key, list->pair.first))
 			{
-				firstNode(node);
-				return ;
+				if (ptr != NULL)
+					return (insertNode(key, value, list->left));
+				ptr = node;
+				list->left = ptr;
+				list = list->left;
+				_size += 1;
 			}
-			if (value >= current->value.second)
+			if (comp(key, list->pair.first))
 			{
-				if (ptr == NULL)
-				{
-					ptr = node;
-					current->left = ptr;
-					current = current->left;
-				}
-				else
-					return insertNode(key, value, current->left);
+				if (ptr != NULL)
+					return (insertNode(key, value, list->right));
+				ptr = node;
+				list->right = ptr;
+				list = list->right;
+				_size += 1;	
 			}
-			if (value < current->value.second)
-			{
-				if (ptr == NULL)
-				{
-					ptr = node;
-					current->right = ptr;
-					current = current->right;
-				}
-				else	
-					return insertNode(key, value, current->right);
-			}
-		}
-		void printRBT(const std::string& prefix, const Node* node, bool isLeft)//AINGERU'S FUNCTION
+			return (node);
+		};
+		pointer	findNode(pointer node, const Key &key)
 		{
-			if( node != nullptr )
+			while (list != NULL && list->pair.first != key)
 			{
-				std::cout << prefix;
-
-				std::cout << (isLeft ? "├──" : "└──" );
-
-				// print the value of the node
-				std::cout << node->value.second << std::endl;
-
-				// enter the next tree level - left and right branch
-				printRBT( prefix + (isLeft ? "│   " : "    "), node->left, true);
-				printRBT( prefix + (isLeft ? "│   " : "    "), node->right, false);
+				if (comp(key, list->pair.first))
+					return (findNode(list->left, key));
+				if (!comp(key, list->pair.first))
+					return (findNode(list->right, key));
 			}
-			
-		}
-		void printTree()
+			return (list);
+		};
+		pointer	deleteNode(pointer node, const Key &key)
+		{
+			while (list != NULL && list->pair.first != key)
+			{
+				if (comp(key, list->pair.first))
+					return (findNode(list->left, key));
+				if (!comp(key, list->pair.first))
+					return (findNode(list->right, key));
+			}
+			return (list);
+		};
+
+		////////////////////////////PRINTF METHODS////////////////////////////
+		void	printAing() { printRBT("", list, false) ; };
+		void printTree()//IONMI'S FUNCTION
 		{
 			if (list)
 				printHelper(list, 0);
-		}
+		};
+	private:
+		void printRBT(const std::string& prefix, const pointer node, bool isLeft)//AINGERU'S FUNCTION
+		{
+			if( node == nullptr )
+				return ;
+			std::cout << prefix;
+			std::cout << (isLeft ? "├──" : "\033[0;31m└──" );
+			// print the value of the node
+			std::cout << node->pair.second << CLOSE << std::endl;
+			// enter the next tree level - left and right branch
+			printRBT( prefix + (isLeft ? "│   " : "    "), node->left, true);
+			printRBT( prefix + (isLeft ? "│   " : "    "), node->right, false);
+		};
 		void printHelper(pointer &root, int space)
 		{
 			// Base case
 			if (root == NULL)
 				return;
-
 			// Increase distance between levels
 			space += 10;
-
 			// Process right child first
 			printHelper(root->right, space);
-
 			// Print current node after space
 			// count
 			std::cout << "\n";
 			for (int i = 10; i < space; i++)
 				std::cout << " ";
-			std::cout << root->key << (root->color == RED ? " (RED)" : " (BLACK)") << "\n";
-
+			std::cout << root->pair.first << (root->color == RED ? " (RED)" : " (BLACK)") << "\n";
 			// Process left child
 			printHelper(root->left, space);
-		}
+		};
 };
 #endif	
